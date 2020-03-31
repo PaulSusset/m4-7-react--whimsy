@@ -1,17 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import LikeButton from '../LikeButton';
+import LikeButton from "../LikeButton";
 
-import Action from './Action';
-import TweetActionIcon from './TweetActionIcon';
+import Action from "./Action";
+import TweetActionIcon from "./TweetActionIcon";
 
 const propTypes = {
   displayName: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   avatarSrc: PropTypes.string.isRequired,
-  tweetContents: PropTypes.string.isRequired,
+  tweetContents: PropTypes.string.isRequired
 };
 
 const Tweet = ({
@@ -25,7 +25,7 @@ const Tweet = ({
   isLikedByCurrentUser,
   isRetweetedByCurrentUser,
   handleToggleLike,
-  handleToggleRetweet,
+  handleToggleRetweet
 }) => {
   return (
     <Wrapper>
@@ -38,9 +38,18 @@ const Tweet = ({
       </Header>
 
       <TweetContents>{tweetContents}</TweetContents>
+      <Timestamp>{timestamp}</Timestamp>
+      <Divider />
+      <Stats>
+        <Stat>
+          <span>{numOfRetweets}</span> Retweets
+        </Stat>
+        <Stat>
+          <span>{numOfLikes}</span> Likes
+        </Stat>
+      </Stats>
 
       <Divider />
-
       <Actions>
         <Action
           color="rgb(27, 149, 224)"
@@ -59,7 +68,10 @@ const Tweet = ({
         >
           <TweetActionIcon
             kind="retweet"
-            color={isRetweetedByCurrentUser ? 'rgb(23, 191, 99)' : undefined}
+            color={
+              isRetweetedByCurrentUser ? "rgb(23, 191, 99)" : "currentColor"
+            }
+            onClick={() => console.log(isRetweetedByCurrentUser)}
           />
         </Action>
 
@@ -89,8 +101,8 @@ const Wrapper = styled.div`
   padding: 16px;
   text-align: left;
   /* padding-bottom: 0; */
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Ubuntu, 'Helvetica Neue', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Ubuntu, "Helvetica Neue", sans-serif;
 `;
 
 const Header = styled.header`
@@ -143,6 +155,15 @@ const Stats = styled.div`
   display: flex;
   align-items: center;
   height: 48px;
+`;
+const Stat = styled.div`
+  font-size: 18px;
+  color: grey;
+  margin-right: 25px;
+  & > span {
+    color: black
+    font-weight: bolder;
+  }
 `;
 
 const Actions = styled.div`

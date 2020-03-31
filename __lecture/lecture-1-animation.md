@@ -90,11 +90,11 @@ const Demo = () => {
       Click me:
       <animated.button
         style={{
-          background: 'red',
+          background: "red",
           width: 50,
           height: 50,
-          transform: toggled ? 'translateY(200px)' : 'translateY(0px)',
-          transition: 'transform 500ms',
+          transform: toggled ? "translateY(200px)" : "translateY(0px)",
+          transition: "transform 500ms"
         }}
         onClick={() => {
           setToggled(!toggled);
@@ -120,7 +120,7 @@ https://codesandbox.io/s/floral-dream-d517n
 ```jsx live=true split=[60,40]
 //  Protip: https://cubic-bezier.com/
 
-const App = ({ children = 'Hello' }) => {
+const App = ({ children = "Hello" }) => {
   return (
     <Button>
       <Surface>{children}</Surface>
@@ -183,7 +183,7 @@ const App = () => {
         <On style={{ opacity: on ? 1 : 0 }} />
         <Off />
       </BulbWrapper>
-      <button onClick={() => setOn(!on)}>Turn {on ? 'off' : 'on'}</button>
+      <button onClick={() => setOn(!on)}>Turn {on ? "off" : "on"}</button>
     </>
   );
 };
@@ -272,13 +272,13 @@ The <SpringDemo />
 ### How to use
 
 ```js
-import { useSpring, animated } from 'react-spring';
+import { useSpring, animated } from "react-spring";
 
 const Demo = () => {
   const [toggled, setToggled] = React.useState(false);
 
   const style = useSpring({
-    transform: toggled ? 'translateY(200px)' : 'translateY(0px)',
+    transform: toggled ? "translateY(200px)" : "translateY(0px)"
   });
 
   return <animated.button style={style} onClick={() => setToggled(!toggled)} />;
@@ -292,17 +292,17 @@ const Demo = () => {
   const [toggled, setToggled] = React.useState(false);
 
   const style = useSpring({
-    transform: toggled ? 'translateY(200px)' : 'translateY(0px)',
+    transform: toggled ? "translateY(200px)" : "translateY(0px)"
   });
 
   return (
     <>
       <animated.button
         style={{
-          background: 'red',
+          background: "red",
           width: 50,
           height: 50,
-          ...style,
+          ...style
         }}
         onClick={() => setToggled(!toggled)}
       />
@@ -327,21 +327,21 @@ const Demo = () => {
   const [toggled, setToggled] = React.useState(false);
 
   const style = useSpring({
-    transform: toggled ? 'translateY(200px)' : 'translateY(0px)',
+    transform: toggled ? "translateY(200px)" : "translateY(0px)",
     config: {
       tension: 200,
-      friction: 1,
-    },
+      friction: 1
+    }
   });
 
   return (
     <>
       <animated.button
         style={{
-          background: 'red',
+          background: "red",
           width: 50,
           height: 50,
-          ...style,
+          ...style
         }}
         onClick={() => setToggled(!toggled)}
       />
@@ -384,7 +384,7 @@ const App = () => {
       <Button onClick={inflateMore}>Inflate!</Button>
       <Box
         style={{
-          transform: `scale(${inflatedAmount})`,
+          transform: `scale(${inflatedAmount})`
         }}
       >
         Inflated!
@@ -423,35 +423,44 @@ render(<App />);
 https://codesandbox.io/s/distracted-feistel-jm81y
 
 ```js live=true split=[70,30]
-const Card = ({ isVisible, children }) => {
-  return (
-    <CardWrapper
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0px)' : 'translateY(10px)',
-      }}
-    >
-      {children}
-    </CardWrapper>
-  );
-};
-
-const CardWrapper = styled.div`
-  box-shadow: 3px 3px 6px black;
-  border-radius: 10px;
-  padding: 50px;
-`;
+import React from "react";
+import { useSpring, animated } from "react-spring";
+import styled from "styled-components";
 
 const App = () => {
-  const [showCard, setShowCard] = React.useState(true);
+  const [showCard, setShowCard] = React.useState(false);
 
   return (
     <Wrapper>
-      <Button>Show Card</Button>
+      <Button
+        onClick={() => {
+          setShowCard(!showCard);
+        }}
+      >
+        Show Card
+      </Button>
       <Card isVisible={showCard}>Hello World</Card>
     </Wrapper>
   );
 };
+
+const Card = ({ isVisible, children }) => {
+  const styleCard = useSpring({
+    opacity: isVisible ? 1 : 0,
+    transform: isVisible ? "translateY(0px)" : "translateY(10px)"
+    // config:{
+    //   tension: 1,
+    //   friction: 0
+    // }
+  });
+  return <CardWrapper style={styleCard}>{children}</CardWrapper>;
+};
+
+const CardWrapper = styled(animated.div)`
+  box-shadow: 3px 3px 6px black;
+  border-radius: 10px;
+  padding: 50px;
+`;
 
 const Wrapper = styled.div`
   text-align: center;
@@ -465,5 +474,5 @@ const Button = styled.button`
   left: 10px;
 `;
 
-render(<App />);
+export default App;
 ```

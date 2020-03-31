@@ -46,7 +46,7 @@ Use the `prefers-reduced-motion` media query to gate these animations
 ---
 
 ```jsx live=true split=[70,30]
-const Demo = ({ children = 'Hello' }) => {
+const Demo = ({ children = "Hello" }) => {
   return (
     <Button>
       <Surface>{children}</Surface>
@@ -81,10 +81,12 @@ const Surface = styled(ButtonLayer)`
   justify-content: center;
   align-items: center;
   font-size: 32px;
-  transition: transform 400ms cubic-bezier(0, 0.68, 0.67, 1.09);
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 400ms cubic-bezier(0, 0.68, 0.67, 1.09);
 
-  &:hover {
-    transform: translate(-10px, -10px);
+    &:hover {
+      transform: translate(-10px, -10px);
+    }
   }
 `;
 
@@ -103,7 +105,7 @@ render(<Demo />);
 ---
 
 ```jsx live=true split=[80,20]
-const Demo = ({ children = 'Hello' }) => {
+const Demo = ({ children = "Hello" }) => {
   return <Ball />;
 };
 
@@ -123,7 +125,9 @@ const Ball = styled.button`
   background: red;
   border-radius: 50%;
   border: none;
-  animation: ${bounce} 600ms alternate ease-out infinite;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: ${bounce} 600ms alternate ease-out infinite;
+  }
 `;
 
 render(<Demo />);
@@ -132,14 +136,22 @@ render(<Demo />);
 ---
 
 ```jsx live=true split=[80,20]
-const Demo = ({ children = 'Hello' }) => {
+const Demo = ({ children = "Hello" }) => {
   const [enabled, setEnabled] = React.useState(false);
+  const [motion, setMotion] = React.useState(true);
+
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(prefers-reduced-motion: no-preference)"
+    );
+    setMotion(mediaQuery.matches);
+  }, []);
   return (
     <Wrapper onClick={() => setEnabled(!enabled)}>
       <Ball
         style={{
-          transform: `translateX(${enabled ? '100%' : '0%'})`,
-          background: enabled ? 'blue' : 'gray',
+          transform: `translateX(${enabled ? "100%" : "0%"})`,
+          background: enabled ? "blue" : "gray"
         }}
       />
     </Wrapper>
@@ -165,6 +177,7 @@ const Ball = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 20px;
+
   transition: transform 250ms, background 400ms;
 `;
 render(<Demo />);
@@ -183,7 +196,7 @@ There's no CSS transition involved!
 This is a way to get the accessibility setting in JavaScript
 
 ```js
-const mediaQuery = window.matchMedia('(prefers-reduced-motion: no-preference)');
+const mediaQuery = window.matchMedia("(prefers-reduced-motion: no-preference)");
 
 console.log(mediaQuery.matches);
 ```
@@ -197,10 +210,10 @@ React Spring exposes a prop, `immediate`, which can be used to disable animation
 ```js
 const style = React.useSpring({
   // this spring oscillates between colors.
-  color: isGreen ? 'green' : 'yellow',
+  color: isGreen ? "green" : "yellow",
 
   // Set this to `true` to disable the animation:
-  immediate: true,
+  immediate: true
 });
 ```
 
@@ -216,9 +229,18 @@ https://codesandbox.io/s/compassionate-bush-3tv15
 
 ```js live=true split=[70,30]
 const Card = ({ isVisible, children }) => {
+  const [motion, setMotion] = React.useState(true);
+
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      "(prefers-reduced-motion: no-preference)"
+    );
+    setMotion(mediaQuery.matches);
+  }, []);
   const style = useSpring({
     opacity: isVisible ? 1 : 0,
-    transform: isVisible ? 'translateY(0px)' : 'translateY(10px)',
+    transform: isVisible ? "translateY(0px)" : "translateY(10px)",
+    immediate: !motion
   });
 
   return <Wrapper style={style}>{children}</Wrapper>;
@@ -234,7 +256,7 @@ const App = () => {
   const [showCard, setShowCard] = React.useState(true);
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div style={{ textAlign: "center" }}>
       <button onClick={() => setShowCard(!showCard)}>Show Card</button>
       <br />
       <br />
@@ -251,21 +273,21 @@ render(<App />);
 https://codesandbox.io/s/late-wildflower-7njue
 
 ```jsx live=true split=[65,35]
-const Demo = ({ children = 'Hello' }) => {
+const Demo = ({ children = "Hello" }) => {
   const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
 
   React.useEffect(() => {
     const handleMove = ev => {
       setMousePos({
         x: ev.clientX,
-        y: ev.clientY,
+        y: ev.clientY
       });
     };
 
-    window.addEventListener('mousemove', handleMove);
+    window.addEventListener("mousemove", handleMove);
 
     return () => {
-      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener("mousemove", handleMove);
     };
   }, []);
 
@@ -275,8 +297,8 @@ const Demo = ({ children = 'Hello' }) => {
     transform: `translate(${x}px, ${y}px)`,
     config: {
       tension: 300,
-      friction: 13,
-    },
+      friction: 13
+    }
   });
 
   return <Ball style={style} />;
